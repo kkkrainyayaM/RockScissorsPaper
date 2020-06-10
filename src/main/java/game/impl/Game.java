@@ -17,23 +17,15 @@ public class Game implements Startable {
 
     @Override
     public void start() {
-        while (true) {
-            int computerMove = getComputerMove(entities.size());
-            String key = SecretUtils.getSecretKey();
-            String hmac = SecretUtils.getHmac(key, entities.get(computerMove));
-            System.out.println("HMAC: " + hmac);
-            printMenu();
-            int userMove = getUserMove();
-            if (isExit(userMove)) return;
-            printResults(computerMove, userMove - 1);
-            System.out.println("HMAC key: " + key);
-            SCANNER.nextLine();
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
+        int computerMove = getComputerMove(entities.size());
+        String key = SecretUtils.getSecretKey();
+        String hmac = SecretUtils.getHmac(key, entities.get(computerMove));
+        System.out.println("HMAC: " + hmac);
+        printMenu();
+        int userMove = getUserMove();
+        if (isExit(userMove)) return;
+        printResults(computerMove, userMove - 1);
+        System.out.println("HMAC key: " + key);
     }
 
     private void printMenu() {
@@ -60,8 +52,8 @@ public class Game implements Startable {
     private int calculateResult(int computerMove, int userMove) {
         int half = entities.size() / 2;
         boolean isUserWin = IntStream.rangeClosed(computerMove, computerMove + half)
-            .map(i -> i % entities.size())
-            .anyMatch(i -> i == userMove);
+                .map(i -> i % entities.size())
+                .anyMatch(i -> i == userMove);
         return isUserWin ? userMove : computerMove;
     }
 
@@ -70,8 +62,8 @@ public class Game implements Startable {
     }
 
     private void printResults(int computerMove, int userMove) {
+        System.out.println("Your move: " + entities.get(userMove));
         System.out.println("Computer move: " + entities.get(computerMove));
-        System.out.println("Your mode: " + entities.get(userMove));
         if (computerMove == userMove) {
             System.out.println("Draw!");
         } else {

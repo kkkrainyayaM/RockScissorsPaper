@@ -1,6 +1,6 @@
 package utils;
 
-import org.apache.commons.codec.binary.Hex;
+import com.google.common.hash.HashCode;
 
 import javax.crypto.KeyGenerator;
 import javax.crypto.Mac;
@@ -22,7 +22,7 @@ public final class SecretUtils {
             KeyGenerator keyGen = KeyGenerator.getInstance(ALGORITHM);
             keyGen.init(new SecureRandom());
             keyGen.init(KEY_SIZE);
-            return Hex.encodeHexString(keyGen.generateKey().getEncoded());
+            return HashCode.fromBytes(keyGen.generateKey().getEncoded()).toString();
         } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException("Failed to create secret key", e);
         }
@@ -38,6 +38,6 @@ public final class SecretUtils {
         } catch (Exception e) {
             throw new RuntimeException("Failed to calculate hmac-sha256", e);
         }
-        return Hex.encodeHexString(hmacSha256);
+        return HashCode.fromBytes(hmacSha256).toString();
     }
 }
